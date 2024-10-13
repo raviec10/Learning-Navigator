@@ -21,7 +21,12 @@ public class ExamController {
 
     @PostMapping("/{examId}/register/{studentId}")
     public Exam registerStudentForExam(@PathVariable Long examId, @PathVariable Long studentId) {
-        return examService.registerStudentForExam(examId, studentId);
+        try {
+            examService.registerStudentForExam(examId, studentId);
+            return ResponseEntity.ok("Student registered for the exam successfully.");
+        } catch (ResourceNotFoundException | BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
